@@ -11,12 +11,15 @@ using UnityEditor;
 public class DataManager : MonoBehaviour
 {
     private TMP_InputField nameInputField;
+    private string saveFilePath;
     public string playerName;
+    public int score;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        saveFilePath = Application.persistentDataPath + "/playerData.Json";
     }
 
     // Update is called once per frame
@@ -41,9 +44,10 @@ public class DataManager : MonoBehaviour
     }
     
     [SerializeField]
-    public void PlayerName()
+    public void SaveData()
     {
-        playerName = nameInputField.text;
+       
+        
 
     }
 
