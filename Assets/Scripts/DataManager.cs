@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.IO;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -44,10 +45,17 @@ public class DataManager : MonoBehaviour
     }
     
     [SerializeField]
+    public void SaveName()
+    {
+        playerName = nameInputField.text;
+    }
+
+    
     public void SaveData()
     {
-       
-        
+        PlayerData data = new PlayerData();
+        data.playerName = playerName;
+
 
     }
 
