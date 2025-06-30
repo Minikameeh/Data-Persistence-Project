@@ -14,7 +14,23 @@ public class DataManager : MonoBehaviour
     public TMP_InputField nameInputField;
     private string saveFilePath;
     [SerializeField] public string playerName;
-    
+    public MainManager mainManager;
+    public static DataManager Instance;
+    public int bestScore;
+
+    private void Awake()
+    {
+        // Verifica si ya existe una instancia
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // persiste entre escenas
+        }
+        else
+        {
+            Destroy(gameObject); // destruye duplicados si los hay
+        }
+    }
 
 
     // Start is called before the first frame update
@@ -26,8 +42,9 @@ public class DataManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         playerName = nameInputField.text;
-        DontDestroyOnLoad(gameObject);
+        
     }
 
     public void StartGame()
@@ -49,6 +66,7 @@ public class DataManager : MonoBehaviour
     public class PlayerData
     {
         public string playerName;
+        public int bestScore;
 
     }
 
@@ -57,6 +75,7 @@ public class DataManager : MonoBehaviour
     {
         PlayerData data = new PlayerData();
         data.playerName = playerName;
+        data.bestScore = bestScore;
 
         string json = JsonUtility.ToJson(data);
 
@@ -74,6 +93,7 @@ public class DataManager : MonoBehaviour
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
 
             data.playerName = playerName;
+            data.bestScore = bestScore;
         }
 
 
