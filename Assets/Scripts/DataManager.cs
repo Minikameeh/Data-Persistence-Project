@@ -11,10 +11,10 @@ using UnityEditor;
 
 public class DataManager : MonoBehaviour
 {
-    private TMP_InputField nameInputField;
+    public TMP_InputField nameInputField;
     private string saveFilePath;
-    public string playerName;
-    public int score;
+    [SerializeField] public string playerName;
+    
 
 
     // Start is called before the first frame update
@@ -26,37 +26,56 @@ public class DataManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        playerName = nameInputField.text;
         DontDestroyOnLoad(gameObject);
     }
-      
+
     public void StartGame()
     {
         SceneManager.LoadScene(1);
     }
-    
+
     public void Exit()
     {
-       
+
 #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
 #else
         Application.Quit(); // original code to quit Unity player
 #endif
     }
-    
-    [SerializeField]
-    public void SaveName()
+
+    [System.Serializable]
+    public class PlayerData
     {
-        playerName = nameInputField.text;
+        public string playerName;
+
     }
 
-    
+    [SerializeField]
     public void SaveData()
     {
         PlayerData data = new PlayerData();
         data.playerName = playerName;
 
+        string json = JsonUtility.ToJson(data);
 
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
+
+    public void LoadData()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            PlayerData data = JsonUtility.FromJson<PlayerData>(json);
+
+            data.playerName = playerName;
+        }
+
+
+    }
 }

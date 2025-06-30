@@ -822,7 +822,7 @@ GameObject:
   - component: {fileID: 1033635950}
   - component: {fileID: 1033635949}
   m_Layer: 5
-  m_Name: Name
+  m_Name: Player Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1342,6 +1342,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43b473c8b7fbd44e922caa9ad4b0515, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nameInputField: {fileID: 1033635949}
+  playerName: 
 --- !u!4 &1487926301
 Transform:
   m_ObjectHideFlags: 0
