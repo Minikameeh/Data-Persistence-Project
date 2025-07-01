@@ -28,8 +28,9 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         
+        dataContainer = GameObject.Find("DataManager");
+        dataManager = dataContainer.gameObject.GetComponent<DataManager>();
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -49,19 +50,7 @@ public class MainManager : MonoBehaviour
 
     private void Update()
     {
-        dataContainer = GameObject.Find("DataManager");
-        dataManager = dataContainer.gameObject.GetComponent<DataManager>();
-
-        dataManager.bestScore = m_Points;
-        bestScoreText.text = "Best Score:" + dataManager.playerName + ":" + dataManager.bestScore;
-        
-        if ( dataManager.bestScore < m_Points)
-        {
-            dataManager.SaveData();
-
-        }
-
-
+       
         if (!m_Started)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -77,10 +66,11 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
-           
-            
-      
 
+            dataManager.bestScore = m_Points;
+            bestScoreText.text = "Best Score:" + dataManager.playerName + ":" + dataManager.bestScore;
+            
+            
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

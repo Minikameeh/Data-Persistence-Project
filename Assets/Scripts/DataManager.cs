@@ -12,12 +12,11 @@ using UnityEditor;
 public class DataManager : MonoBehaviour
 {
     public TMP_InputField nameInputField;
+    public TextMeshProUGUI bestScoreTextMenu;
     private string saveFilePath;
     [SerializeField] public string playerName;
     public MainManager mainManager;
-    public DataManager dataManager;
     public static DataManager Instance;
-
     public int bestScore;
 
     private void Awake()
@@ -45,9 +44,8 @@ public class DataManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         playerName = nameInputField.text;
-        
+        bestScoreTextMenu.text = "Best Score:" + playerName + ":" + bestScore;
     }
 
     public void StartGame()
@@ -85,7 +83,7 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
-
+    
     public void LoadData()
     {
         string path = Application.persistentDataPath + "/savefile.json";
@@ -95,8 +93,8 @@ public class DataManager : MonoBehaviour
             string json = File.ReadAllText(path);
             PlayerData data = JsonUtility.FromJson<PlayerData>(json);
 
-            data.playerName = playerName;
-            data.bestScore = bestScore;
+            playerName = data.playerName;
+            bestScore = data.bestScore;
         }
 
 
