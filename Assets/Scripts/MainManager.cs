@@ -9,6 +9,7 @@ public class MainManager : MonoBehaviour
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
+    public GameObject dataContainer;
     public DataManager dataManager;
 
     public Text ScoreText;
@@ -27,6 +28,9 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -43,11 +47,20 @@ public class MainManager : MonoBehaviour
         }
     }
 
-    
-
-
     private void Update()
     {
+        dataContainer = GameObject.Find("DataManager");
+        dataManager = dataContainer.gameObject.GetComponent<DataManager>();
+
+        dataManager.bestScore = m_Points;
+        bestScoreText.text = "Best Score:" + dataManager.playerName + ":" + dataManager.bestScore;
+        
+        if ( dataManager.bestScore < m_Points)
+        {
+            dataManager.SaveData();
+
+        }
+
 
         if (!m_Started)
         {
@@ -64,7 +77,9 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
+           
             
+      
 
             if (Input.GetKeyDown(KeyCode.Space))
             {

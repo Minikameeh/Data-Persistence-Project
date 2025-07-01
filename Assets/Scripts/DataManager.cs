@@ -15,11 +15,14 @@ public class DataManager : MonoBehaviour
     private string saveFilePath;
     [SerializeField] public string playerName;
     public MainManager mainManager;
+    public DataManager dataManager;
     public static DataManager Instance;
+
     public int bestScore;
 
     private void Awake()
     {
+
         // Verifica si ya existe una instancia
         if (Instance == null)
         {
