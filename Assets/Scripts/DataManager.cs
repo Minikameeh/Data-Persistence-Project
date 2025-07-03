@@ -14,14 +14,16 @@ public class DataManager : MonoBehaviour
     public TMP_InputField nameInputField;
     public TextMeshProUGUI bestScoreTextMenu;
     private string saveFilePath;
+    public GameObject ErasePoPUp;
     [SerializeField] public string playerName;
     public MainManager mainManager;
     public static DataManager Instance;
     public int bestScore;
+    public PlayerList playerList = new PlayerList();
 
     private void Awake()
     {
-
+        
         // Verifica si ya existe una instancia
         if (Instance == null)
         {
@@ -38,7 +40,9 @@ public class DataManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ErasePoPUp.SetActive(false);
         saveFilePath = Application.persistentDataPath + "/playerData.Json";
+        LoadData();
     }
 
     // Update is called once per frame
@@ -50,11 +54,13 @@ public class DataManager : MonoBehaviour
 
     public void StartGame()
     {
+        SaveData();
         SceneManager.LoadScene(1);
     }
-
+    
     public void Exit()
     {
+        SaveData();
 
 #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
@@ -64,39 +70,113 @@ public class DataManager : MonoBehaviour
     }
 
     [System.Serializable]
-    public class PlayerData
+    public class Player
     {
         public string playerName;
         public int bestScore;
-
     }
+   [System.Serializable]
+    public class PlayerList
+    {
+        public Player[] players = new Player[6];
+    }
+
+
 
     [SerializeField]
     public void SaveData()
     {
-        PlayerData data = new PlayerData();
-        data.playerName = playerName;
-        data.bestScore = bestScore;
+        string newName = nameInputField.text;
+        Player newPlayer = new Player
+        {
+            playerName = nameInputField.text,
+            bestScore = bestScore
+        };
 
-        string json = JsonUtility.ToJson(data);
-
-        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+        // Buscar el primer slot vacío
+        for (int i = 0; i < playerList.players.Length; i++)
+        {
+            if (string.IsNullOrEmpty(playerList.players[i].playerName))
+            {
+                playerList.players[i].playerName = newName;
+                playerList.players[i].bestScore = 0; // O el valor actual si ya lo tienes
+                break;
+            }
+        }
+ 
+        
+        // 4.3 Serializa y escribe todo el array a JSON
+        string json = JsonUtility.ToJson(playerList, prettyPrint: true);
+        File.WriteAllText(saveFilePath, json);
     }
 
     
     public void LoadData()
     {
-        string path = Application.persistentDataPath + "/savefile.json";
-
-        if (File.Exists(path))
+        if (File.Exists(saveFilePath))
         {
-            string json = File.ReadAllText(path);
-            PlayerData data = JsonUtility.FromJson<PlayerData>(json);
+            string json = File.ReadAllText(saveFilePath);
+            playerList = JsonUtility.FromJson<PlayerList>(json);
 
-            playerName = data.playerName;
-            bestScore = data.bestScore;
+            // Asegúrate de que ningún elemento sea null
+            for (int i = 0; i < playerList.players.Length; i++)
+            {
+                if (playerList.players[i] == null)
+                    playerList.players[i] = new Player();
+            }
+        }
+        else
+        {
+            // Si no existe el archivo, inicializa una lista nueva
+            playerList = new PlayerList();
+            for (int i = 0; i < playerList.players.Length; i++)
+            {
+                playerList.players[i] = new Player();
+            }
         }
 
 
     }
+    
+    public void EraseDataPopUp()
+    {
+        ErasePoPUp.SetActive(true);
+    }
+    
+    public void EraseNoButton()
+    {
+       
+        ErasePoPUp.SetActive(false);
+    }
+
+    public void EraseYesButton()
+    {
+        DeleteAllData();
+        ErasePoPUp.SetActive(false);
+    }
+
+    public void DeleteAllData()
+    {
+        // Borra el archivo si existe
+        if (File.Exists(saveFilePath))
+        {
+            File.Delete(saveFilePath);
+            Debug.Log("All Players Data Erased");
+        }
+
+        // Reinicia la lista en memoria
+        playerList = new PlayerList();
+        for (int i = 0; i < playerList.players.Length; i++)
+        {
+            playerList.players[i] = new Player();
+        }
+
+        // Puedes guardar el estado limpio si quieres
+        SaveData();
+    }
+
+
 }
+
+
+
