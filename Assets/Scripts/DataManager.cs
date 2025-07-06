@@ -20,6 +20,7 @@ public class DataManager : MonoBehaviour
     public static DataManager Instance;
     public int bestScore;
     public PlayerList playerList = new PlayerList();
+    public int activePlayerIndex = -1;
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class DataManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // persiste entre escenas
+            LoadData();
         }
         else
         {
@@ -87,25 +89,42 @@ public class DataManager : MonoBehaviour
     public void SaveData()
     {
         string newName = nameInputField.text;
-        Player newPlayer = new Player
-        {
-            playerName = nameInputField.text,
-            bestScore = bestScore
-        };
-
-        // Buscar el primer slot vacío
+        int existingIndex = -1;
         for (int i = 0; i < playerList.players.Length; i++)
         {
-            if (string.IsNullOrEmpty(playerList.players[i].playerName))
+            if (playerList.players[i].playerName == newName)
             {
-                playerList.players[i].playerName = newName;
-                playerList.players[i].bestScore = 0; // O el valor actual si ya lo tienes
+                existingIndex = i;
                 break;
             }
         }
- 
-        
-        // 4.3 Serializa y escribe todo el array a JSON
+
+        if (existingIndex != -1)
+        {
+            // Si el jugador ya existe, actualizar solo su score si es mayor
+            if (bestScore > playerList.players[existingIndex].bestScore)
+            {
+                playerList.players[existingIndex].bestScore = bestScore;
+            }
+
+            activePlayerIndex = existingIndex;
+        }
+        else
+        {
+            // Si no existe, buscar un hueco vacío y crear uno nuevo
+            for (int i = 0; i < playerList.players.Length; i++)
+            {
+                if (string.IsNullOrEmpty(playerList.players[i].playerName))
+                {
+                    playerList.players[i].playerName = newName;
+                    playerList.players[i].bestScore = bestScore;
+                    activePlayerIndex = i;
+                    break;
+                }
+            }
+        }
+
+        // Guardar a disco
         string json = JsonUtility.ToJson(playerList, prettyPrint: true);
         File.WriteAllText(saveFilePath, json);
     }

@@ -66,15 +66,32 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
+            var dm = DataManager.Instance;
+            int index = dm.activePlayerIndex;
+            if (index >= 0 && index < dm.playerList.players.Length)
+            {
+                // Si m_Points es mayor que el bestScore actual, actualizar
+                if (m_Points > dm.playerList.players[index].bestScore)
+                {
+                    dm.playerList.players[index].bestScore = m_Points;
+                    dm.SaveData();
+                }
+                bestScoreText.text = "Best Score: " +
+                    dm.playerList.players[index].playerName + " : " +
+                    dm.playerList.players[index].bestScore;
+            }
 
-            dataManager.bestScore = m_Points;
-            bestScoreText.text = "Best Score:" + dataManager.playerName + ":" + dataManager.bestScore;
-            
-            
+            DataManager.Instance.playerList.players[DataManager.Instance.activePlayerIndex].bestScore = m_Points;
+            DataManager.Instance.SaveData();
+            bestScoreText.text = "Best Score:" + dataManager.playerList.players[index].playerName + ":" + dataManager.playerList.players[index].bestScore;
+
+            // Reiniciar escena con Space, por ejemplo.
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+
+           
         }
     }
 
