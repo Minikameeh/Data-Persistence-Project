@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.IO;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -193,7 +194,14 @@ public class DataManager : MonoBehaviour
         // Puedes guardar el estado limpio si quieres
         SaveData();
     }
-
+    
+    public List<Player> GetSortedPlayers()
+    {
+        return playerList.players
+            .Where(p => !string.IsNullOrEmpty(p.playerName))
+            .OrderByDescending(p => p.bestScore)
+            .ToList();
+    }
 
 }
 
