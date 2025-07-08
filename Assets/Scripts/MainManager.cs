@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
@@ -50,7 +51,7 @@ public class MainManager : MonoBehaviour
 
     private void Update()
     {
-       
+        GoBackToMenu();
         if (!m_Started)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -84,16 +85,14 @@ public class MainManager : MonoBehaviour
             DataManager.Instance.playerList.players[DataManager.Instance.activePlayerIndex].bestScore = m_Points;
             DataManager.Instance.SaveData();
             bestScoreText.text = "Best Score:" + dataManager.playerList.players[index].playerName + ":" + dataManager.playerList.players[index].bestScore;
-
-            // Reiniciar escena con Space, por ejemplo.
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-
+            
            
+
         }
+       
     }
+
+    
 
     void AddPoint(int point)
     {
@@ -105,5 +104,16 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+          
     }
+    public void GoBackToMenu()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && m_GameOver == true)
+        {
+            SceneManager.LoadScene(0);
+            Debug.Log("Spacebar");
+        }
+    }
+    
+
 }

@@ -46,6 +46,7 @@ public class DataManager : MonoBehaviour
         ErasePoPUp.SetActive(false);
         saveFilePath = Application.persistentDataPath + "/playerData.Json";
         LoadData();
+        
     }
 
     // Update is called once per frame
@@ -53,6 +54,7 @@ public class DataManager : MonoBehaviour
     {
         playerName = nameInputField.text;
         bestScoreTextMenu.text = "Best Score:" + playerName + ":" + bestScore;
+        
     }
 
     public void StartGame()
@@ -202,7 +204,9 @@ public class DataManager : MonoBehaviour
             .OrderByDescending(p => p.bestScore)
             .ToList();
     }
-
+    
+    
+    
 }
 
 
