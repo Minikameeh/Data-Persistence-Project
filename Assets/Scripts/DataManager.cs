@@ -17,6 +17,7 @@ public class DataManager : MonoBehaviour
     public TextMeshProUGUI bestScoreTextMenu;
     private string saveFilePath;
     public GameObject ErasePoPUp;
+    public GameObject LeaderBoardScreen;
     public Button startButton;
     [SerializeField] public string playerName;
     public MainManager mainManager;
@@ -71,7 +72,6 @@ public class DataManager : MonoBehaviour
             bestScoreTextMenu.text = "Best Score: " + playerName + " : " + bestScore;
         }
        
-        
     }
 
     public void StartGame()
@@ -192,6 +192,11 @@ public class DataManager : MonoBehaviour
     {
         DeleteAllData();
         ErasePoPUp.SetActive(false);
+    }
+
+    public void LeaderBoardScreenPopUp()
+    {
+        LeaderBoardScreen.SetActive(true);
     }
 
     public void DeleteAllData()
