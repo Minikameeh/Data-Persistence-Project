@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.IO;
@@ -16,6 +17,7 @@ public class DataManager : MonoBehaviour
     public TextMeshProUGUI bestScoreTextMenu;
     private string saveFilePath;
     public GameObject ErasePoPUp;
+    public Button startButton;
     [SerializeField] public string playerName;
     public MainManager mainManager;
     public static DataManager Instance;
@@ -31,6 +33,7 @@ public class DataManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // persiste entre escenas
+            SceneManager.sceneLoaded += OnSceneLoaded;
             LoadData();
         }
         else
@@ -46,14 +49,29 @@ public class DataManager : MonoBehaviour
         ErasePoPUp.SetActive(false);
         saveFilePath = Application.persistentDataPath + "/playerData.Json";
         LoadData();
-        
+        if (nameInputField == null)
+            nameInputField = GameObject.Find("NameInputField")?.GetComponent<TMP_InputField>();
+        if (startButton == null)
+            startButton = GameObject.Find("StartButton")?.GetComponent<Button>();
+
+        // Asegúrate de limpiar antes de volver a añadir el listener
+        if (startButton != null)
+        {
+            startButton.onClick.RemoveAllListeners();
+            startButton.onClick.AddListener(StartGame);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        playerName = nameInputField.text;
-        bestScoreTextMenu.text = "Best Score:" + playerName + ":" + bestScore;
+        if (nameInputField != null)
+        {
+            playerName = nameInputField.text;
+            bestScoreTextMenu.text = "Best Score: " + playerName + " : " + bestScore;
+        }
+       
         
     }
 
@@ -83,7 +101,7 @@ public class DataManager : MonoBehaviour
    [System.Serializable]
     public class PlayerList
     {
-        public Player[] players = new Player[6];
+        public Player[] players = new Player[20];
     }
 
 
@@ -205,8 +223,31 @@ public class DataManager : MonoBehaviour
             .ToList();
     }
     
-    
-    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.buildIndex == 0) // Asegúrate de que estás en el menú
+        {
+            Debug.Log("Escena del menú cargada, reconfigurando referencias...");
+
+            nameInputField = GameObject.Find("NameInputField")?.GetComponent<TMP_InputField>();
+            startButton = GameObject.Find("StartButton")?.GetComponent<Button>();
+
+            if (startButton != null)
+            {
+                startButton.onClick.RemoveAllListeners();
+                startButton.onClick.AddListener(StartGame);
+            }
+            else
+            {
+                Debug.LogWarning("StartButton no encontrado al volver a menú");
+            }
+        }
+    }
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
 }
 
 
