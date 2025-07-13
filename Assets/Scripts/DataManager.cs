@@ -51,10 +51,11 @@ public class DataManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ReconnectUI();
         ErasePoPUp.SetActive(false);
         saveFilePath = Application.persistentDataPath + "/playerData.Json";
         LoadData();
-        ReconnectUI();
+       
         
 
     }
