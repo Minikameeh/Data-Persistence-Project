@@ -33,17 +33,19 @@ public class DataManager : MonoBehaviour
 
     private void Awake()
     {
-        
-        // Verifica si ya existe una instancia
+
+        saveFilePath = Application.persistentDataPath + "/playerData.Json";
+
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // persiste entre escenas
+            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded; 
             LoadData();
         }
         else
         {
-            Destroy(gameObject); // destruye duplicados si los hay
+            Destroy(gameObject);
         }
     }
 
@@ -51,11 +53,12 @@ public class DataManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ReconnectUI();
+       
         ErasePoPUp.SetActive(false);
         saveFilePath = Application.persistentDataPath + "/playerData.Json";
         LoadData();
-       
+        
+        ReconnectUI();
         
 
     }
@@ -63,22 +66,42 @@ public class DataManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         if (nameInputField != null)
         {
             playerName = nameInputField.text;
             bestScoreTextMenu.text = "Best Score: " + playerName + " : " + bestScore;
         }
-        eraseButton.onClick.AddListener(EraseDataPopUp);
-        eraseButtonYes.onClick.AddListener(EraseYesButton);
-        eraseButtonNo.onClick.AddListener(EraseNoButton);
-        leaderBoardButtonScreen.onClick.AddListener(LeaderBoardScreenPopUp);
+        
+        if (startButton != null)
+            startButton.onClick.AddListener(StartGame);
 
+        if (eraseButton != null)
+            eraseButton.onClick.AddListener(EraseDataPopUp);
 
+        if (eraseButtonYes != null)
+            eraseButtonYes.onClick.AddListener(EraseYesButton);
 
+        if (eraseButtonNo != null)
+            eraseButtonNo.onClick.AddListener(EraseNoButton);
 
+        if (leaderBoardButtonScreen != null)
+            leaderBoardButtonScreen.onClick.AddListener(LeaderBoardScreenPopUp);
 
+        if (leaderBoardButtonQuit != null)
+            leaderBoardButtonQuit.onClick.AddListener(LeaderBoardScreenQuit);
+    }
+    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ReconnectUI();
+    }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
     }
 
     public void StartGame()
@@ -250,23 +273,7 @@ public class DataManager : MonoBehaviour
         leaderBoardButtonScreen = GameObject.Find("LeaderBoard Button")?.GetComponent<Button>();
         leaderBoardButtonQuit = GameObject.Find("LeaderBoardQuitButton")?.GetComponent<Button>();
 
-        if (startButton != null)
-            startButton.onClick.AddListener(StartGame);
-
-        if (eraseButton != null)
-            eraseButton.onClick.AddListener(EraseDataPopUp);
-
-        if (eraseButtonYes != null)
-            eraseButtonYes.onClick.AddListener(EraseYesButton);
-
-        if (eraseButtonNo != null)
-            eraseButtonNo.onClick.AddListener(EraseNoButton);
-
-        if (leaderBoardButtonScreen != null)
-            leaderBoardButtonScreen.onClick.AddListener(LeaderBoardScreenPopUp);
-
-        if (leaderBoardButtonQuit != null)
-            leaderBoardButtonQuit.onClick.AddListener(LeaderBoardScreenQuit);
+       
     }
     
     
