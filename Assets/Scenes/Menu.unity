@@ -515,8 +515,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1487926300}
-        m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
+      - m_Target: {fileID: 1966813472}
+        m_TargetAssemblyTypeName: MenuUiHandler, Assembly-CSharp
         m_MethodName: EraseNoButton
         m_Mode: 1
         m_Arguments:
@@ -782,9 +782,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1487926300}
-        m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
-        m_MethodName: StartGame
+      - m_Target: {fileID: 1966813472}
+        m_TargetAssemblyTypeName: MenuUiHandler, Assembly-CSharp
+        m_MethodName: StartGameFromMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1124,8 +1124,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1487926300}
-        m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
+      - m_Target: {fileID: 1966813472}
+        m_TargetAssemblyTypeName: MenuUiHandler, Assembly-CSharp
         m_MethodName: LeaderBoardScreenPopUp
         m_Mode: 1
         m_Arguments:
@@ -1512,8 +1512,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1487926300}
-        m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
+      - m_Target: {fileID: 1966813472}
+        m_TargetAssemblyTypeName: MenuUiHandler, Assembly-CSharp
         m_MethodName: EraseDataPopUp
         m_Mode: 1
         m_Arguments:
@@ -2859,8 +2859,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1979082210}
   m_HandleRect: {fileID: 1979082209}
   m_Direction: 2
-  m_Value: 1.000002
-  m_Size: 0.3317372
+  m_Value: 1.0000018
+  m_Size: 0.33173424
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3107,9 +3107,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1487926300}
-        m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
-        m_MethodName: Exit
+      - m_Target: {fileID: 1966813472}
+        m_TargetAssemblyTypeName: MenuUiHandler, Assembly-CSharp
+        m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3420,11 +3420,6 @@ MonoBehaviour:
   ErasePoPUp: {fileID: 117524882}
   LeaderBoardScreen: {fileID: 1668444794}
   startButton: {fileID: 195878673}
-  eraseButton: {fileID: 588527875}
-  eraseButtonYes: {fileID: 1763876125}
-  eraseButtonNo: {fileID: 148650897}
-  leaderBoardButtonScreen: {fileID: 532764686}
-  leaderBoardButtonQuit: {fileID: 1805392510}
   playerName: 
   mainManager: {fileID: 0}
   activePlayerIndex: -1
@@ -3771,8 +3766,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1487926300}
-        m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
+      - m_Target: {fileID: 1966813472}
+        m_TargetAssemblyTypeName: MenuUiHandler, Assembly-CSharp
         m_MethodName: EraseYesButton
         m_Mode: 1
         m_Arguments:
@@ -3903,7 +3898,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1805392511}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1966813472}
+        m_TargetAssemblyTypeName: MenuUiHandler, Assembly-CSharp
+        m_MethodName: LeaderBoardScreenQuit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1805392511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4620,6 +4627,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1944858804}
   m_CullTransparentMesh: 1
+--- !u!1 &1966813471
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1966813473}
+  - component: {fileID: 1966813472}
+  m_Layer: 0
+  m_Name: MenuUIHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1966813472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966813471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f586ed7b9960f48ba2f1fbd1f4f1f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataConteiner: {fileID: 1487926299}
+  dataManager: {fileID: 0}
+  erasePoPUp: {fileID: 117524882}
+  LeaderBoardScreen: {fileID: 1668444794}
+  leaderBoardButtonScreen: {fileID: 532764684}
+--- !u!4 &1966813473
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966813471}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1078.4374, y: 781.37537, z: -441.91016}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1979082208
 GameObject:
   m_ObjectHideFlags: 0
@@ -4652,7 +4707,7 @@ RectTransform:
   m_Father: {fileID: 895224384}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.66826284}
+  m_AnchorMin: {x: 0, y: 0.66826606}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -4939,7 +4994,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -91.499855, y: 99.999214}
+  m_AnchoredPosition: {x: -91.499855, y: 99.99926}
   m_SizeDelta: {x: 184, y: 602.8869}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2024370058

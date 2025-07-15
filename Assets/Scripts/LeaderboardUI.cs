@@ -23,9 +23,9 @@ public class LeaderboardUI : MonoBehaviour
         {
             Transform row = contentParent.GetChild(i);
 
-            TMP_Text positionText = row.GetChild(0).GetComponentInChildren<TMP_Text>();
+            TMP_Text positionText = row.GetChild(2).GetComponentInChildren<TMP_Text>();
             TMP_Text nameText = row.GetChild(1).GetComponentInChildren<TMP_Text>();
-            TMP_Text scoreText = row.GetChild(2).GetComponentInChildren<TMP_Text>();
+            TMP_Text scoreText = row.GetChild(0).GetComponentInChildren<TMP_Text>();
 
             if (i < sortedPlayers.Count)
             {

@@ -19,11 +19,6 @@ public class DataManager : MonoBehaviour
     [SerializeField] public GameObject ErasePoPUp;
     [SerializeField] public GameObject LeaderBoardScreen;
     [SerializeField] public Button startButton;
-    [SerializeField] public Button eraseButton;
-    [SerializeField] public Button eraseButtonYes;
-    [SerializeField] public Button eraseButtonNo;
-    [SerializeField] public Button leaderBoardButtonScreen;
-    [SerializeField] public Button leaderBoardButtonQuit;
     [SerializeField] public string playerName;
     public MainManager mainManager;
     public static DataManager Instance;
@@ -40,8 +35,9 @@ public class DataManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            SceneManager.sceneLoaded += OnSceneLoaded; 
             LoadData();
+
+            
         }
         else
         {
@@ -52,17 +48,16 @@ public class DataManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-       
+    {  
+        
         ErasePoPUp.SetActive(false);
         saveFilePath = Application.persistentDataPath + "/playerData.Json";
         LoadData();
-        
-        ReconnectUI();
-        
 
+       
     }
 
+   
     // Update is called once per frame
     void Update()
     {
@@ -70,39 +65,11 @@ public class DataManager : MonoBehaviour
         {
             playerName = nameInputField.text;
             bestScoreTextMenu.text = "Best Score: " + playerName + " : " + bestScore;
-        }
-        
-        if (startButton != null)
-            startButton.onClick.AddListener(StartGame);
-
-        if (eraseButton != null)
-            eraseButton.onClick.AddListener(EraseDataPopUp);
-
-        if (eraseButtonYes != null)
-            eraseButtonYes.onClick.AddListener(EraseYesButton);
-
-        if (eraseButtonNo != null)
-            eraseButtonNo.onClick.AddListener(EraseNoButton);
-
-        if (leaderBoardButtonScreen != null)
-            leaderBoardButtonScreen.onClick.AddListener(LeaderBoardScreenPopUp);
-
-        if (leaderBoardButtonQuit != null)
-            leaderBoardButtonQuit.onClick.AddListener(LeaderBoardScreenQuit);
+        } 
+       
     }
+   
     
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        ReconnectUI();
-    }
-
-    private void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-        }
-    }
 
     public void StartGame()
     {
@@ -138,8 +105,35 @@ public class DataManager : MonoBehaviour
     [SerializeField]
     public void SaveData()
     {
+        // Asegurarse de que nameInputField no es null
+        if (nameInputField == null)
+        {
+            GameObject inputFieldObj = GameObject.Find("Player Name");
+            if (inputFieldObj != null)
+            {
+                nameInputField = inputFieldObj.GetComponent<TMP_InputField>();
+            }
+        }
+
+        // Si sigue siendo null, abortar el guardado
+        if (nameInputField == null)
+        {
+            Debug.LogError("No se encontró el TMP_InputField 'Player Name'. No se puede guardar.");
+            return;
+        }
+
+        // Leer el texto del input field
         string newName = nameInputField.text;
+
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            Debug.LogWarning("El nombre del jugador está vacío. No se guardará nada.");
+            return;
+        }
+
         int existingIndex = -1;
+
+        // Buscar si ya existe ese jugador
         for (int i = 0; i < playerList.players.Length; i++)
         {
             if (playerList.players[i].playerName == newName)
@@ -151,7 +145,7 @@ public class DataManager : MonoBehaviour
 
         if (existingIndex != -1)
         {
-            // Si el jugador ya existe, actualizar solo su score si es mayor
+            // Actualizar score solo si es mayor
             if (bestScore > playerList.players[existingIndex].bestScore)
             {
                 playerList.players[existingIndex].bestScore = bestScore;
@@ -161,7 +155,7 @@ public class DataManager : MonoBehaviour
         }
         else
         {
-            // Si no existe, buscar un hueco vacío y crear uno nuevo
+            // Buscar hueco vacío
             for (int i = 0; i < playerList.players.Length; i++)
             {
                 if (string.IsNullOrEmpty(playerList.players[i].playerName))
@@ -174,12 +168,15 @@ public class DataManager : MonoBehaviour
             }
         }
 
-        // Guardar a disco
+        // Guardar en archivo JSON
         string json = JsonUtility.ToJson(playerList, prettyPrint: true);
         File.WriteAllText(saveFilePath, json);
+
+        Debug.Log("Datos guardados correctamente para el jugador: " + newName);
     }
 
-    
+
+
     public void LoadData()
     {
         if (File.Exists(saveFilePath))
@@ -206,34 +203,8 @@ public class DataManager : MonoBehaviour
 
 
     }
-    
-    public void EraseDataPopUp()
-    {
-        ErasePoPUp.SetActive(true);
-    }
-    
-    public void EraseNoButton()
-    {
-       
-        ErasePoPUp.SetActive(false);
-    }
 
-    public void EraseYesButton()
-    {
-        DeleteAllData();
-        ErasePoPUp.SetActive(false);
-    }
-
-    public void LeaderBoardScreenPopUp()
-    {
-        LeaderBoardScreen.SetActive(true);
-        leaderBoardButtonScreen.gameObject.SetActive(false);
-    }
-    public void LeaderBoardScreenQuit()
-    {
-        LeaderBoardScreen.SetActive(false);
-        leaderBoardButtonScreen.gameObject.SetActive(true);
-    }
+   
 
     public void DeleteAllData()
     {
@@ -262,19 +233,7 @@ public class DataManager : MonoBehaviour
             .OrderByDescending(p => p.bestScore)
             .ToList();
     }
-    private void ReconnectUI()
-    {
-        nameInputField = GameObject.Find("Player Name")?.GetComponent<TMP_InputField>();
-        bestScoreTextMenu = GameObject.Find("Best Score Menu Text")?.GetComponent<TextMeshProUGUI>();
-        startButton = GameObject.Find("Start Button")?.GetComponent<Button>();
-        eraseButton = GameObject.Find("Erase Data Button")?.GetComponent<Button>();
-        eraseButtonYes = GameObject.Find("Yes")?.GetComponent<Button>();
-        eraseButtonNo = GameObject.Find("No")?.GetComponent<Button>();
-        leaderBoardButtonScreen = GameObject.Find("LeaderBoard Button")?.GetComponent<Button>();
-        leaderBoardButtonQuit = GameObject.Find("LeaderBoardQuitButton")?.GetComponent<Button>();
-
-       
-    }
+   
     
     
 
