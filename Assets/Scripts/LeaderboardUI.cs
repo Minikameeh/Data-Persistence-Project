@@ -38,7 +38,7 @@ public class LeaderboardUI : MonoBehaviour
             {
                 // Si no hay tantos jugadores, dejamos las filas vacías
                 positionText.text = "-";
-                nameText.text = "VACÍO";
+                nameText.text = "EMPTY";
                 scoreText.text = "-";
             }
         }
