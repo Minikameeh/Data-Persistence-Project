@@ -14,7 +14,7 @@ using UnityEditor;
 public class DataManager : MonoBehaviour
 {
     public TMP_InputField nameInputField;
-    public TextMeshProUGUI bestScoreTextMenu;
+  
     private string saveFilePath;
     [SerializeField] public GameObject ErasePoPUp;
     [SerializeField] public GameObject LeaderBoardScreen;
@@ -64,7 +64,7 @@ public class DataManager : MonoBehaviour
         if (nameInputField != null)
         {
             playerName = nameInputField.text;
-            bestScoreTextMenu.text = "Best Score: " + playerName + " : " + bestScore;
+            
         } 
        
     }
